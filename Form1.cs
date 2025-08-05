@@ -19,7 +19,21 @@ namespace SW_CUT
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("CRIAR PROJETO - IMPORTAR ARQUIVO DXF");
+            var leitor = new DxfReader();
+            var formas = leitor.LerArquivo("meuarquivo.dxf");
+
+            foreach (var forma in formas)
+            {
+                Console.WriteLine($"Forma: {forma.Tipo}");
+                foreach (var ponto in forma.Pontos)
+                {
+                    Console.WriteLine($"  Ponto: ({ponto.X}, {ponto.Y})");
+                }
+                if (forma.Raio > 0)
+                {
+                    Console.WriteLine($"  Raio: {forma.Raio}");
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
