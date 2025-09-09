@@ -16,6 +16,23 @@ private void InitializeComponent()
     this.Controls.Add(btnImportarDXF);
 }
 
+//var leitor = new DxfReader();
+        //    var formas = leitor.LerArquivo("meuarquivo.dxf");
+
+//            foreach (var forma in formas)
+  //          {
+    //            Console.WriteLine($"Forma: {forma.Tipo}");
+      //          foreach (var ponto in forma.Pontos)
+        //        {
+          //          Console.WriteLine($"  Ponto: ({ponto.X}, {ponto.Y})");
+            //    }
+              //  if (forma.Raio > 0)
+                //{
+                  //  Console.WriteLine($"  Raio: {forma.Raio}");
+               // }
+           // }
+
+
 private void btnImportarDXF_Click(object sender, EventArgs e)
 {
     OpenFileDialog openFile = new OpenFileDialog();
