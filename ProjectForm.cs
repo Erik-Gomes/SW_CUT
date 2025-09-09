@@ -17,7 +17,6 @@ namespace SW_CUT
 
         private void InitializeComponent()
         {
-            // FlowLayoutPanel para pré-visualizações
             this.flowPreviews = new FlowLayoutPanel();
             this.flowPreviews.Location = new Point(20, 60);
             this.flowPreviews.Size = new Size(760, 400);
@@ -26,7 +25,6 @@ namespace SW_CUT
             this.flowPreviews.FlowDirection = FlowDirection.LeftToRight;
             this.Controls.Add(this.flowPreviews);
 
-            // Botão de importar DXF
             this.btnImportarDXF = new Button();
             this.btnImportarDXF.Text = "Importar DXF";
             this.btnImportarDXF.Location = new Point(20, 20);
@@ -47,33 +45,30 @@ namespace SW_CUT
 
             if (openFile.ShowDialog() == DialogResult.OK)
             {
-                flowPreviews.Controls.Clear(); // limpa prévias anteriores
+                flowPreviews.Controls.Clear();
 
                 foreach (var arquivo in openFile.FileNames)
                 {
                     var leitor = new DxfReader();
                     var formas = leitor.LerArquivo(arquivo);
 
-                    // Container para PictureBox + Label
                     Panel container = new Panel();
                     container.Size = new Size(200, 180);
                     container.Margin = new Padding(5);
 
-                    // PictureBox para pré-visualização
                     PictureBox preview = new PictureBox();
                     preview.Size = new Size(200, 150);
                     preview.BackColor = Color.White;
                     preview.BorderStyle = BorderStyle.FixedSingle;
                     preview.Paint += (s, pe) => DrawPreview(pe.Graphics, formas, preview.Size);
 
-                    // Clique para abrir visualização ampliada
+                    // Clique abre PreviewForm
                     preview.Click += (s, me) =>
                     {
                         PreviewForm pf = new PreviewForm(formas);
                         pf.ShowDialog();
                     };
 
-                    // Label com nome do arquivo
                     Label lblNome = new Label();
                     lblNome.Text = System.IO.Path.GetFileName(arquivo);
                     lblNome.Dock = DockStyle.Bottom;
@@ -141,38 +136,7 @@ namespace SW_CUT
                                p1.X * scale + offsetX, p1.Y * scale + offsetY,
                                p2.X * scale + offsetX, p2.Y * scale + offsetY);
                 }
-                else if (f.Tipo == "Circulo" && f.Raio > 0)
-                {
-                    var centro = f.Pontos[0];
-                    float raio = f.Raio * scale;
-                    g.DrawEllipse(Pens.Green,
-                                  centro.X * scale + offsetX - raio,
-                                  centro.Y * scale + offsetY - raio,
-                                  raio * 2, raio * 2);
-                }
             }
         }
-    }
-
-    // Estrutura de dados para formas
-    public class Forma
-    {
-        public string Tipo { get; set; } // "Linha" ou "Circulo"
-        public List<Ponto> Pontos { get; set; }
-        public float Raio { get; set; } // para círculos
-        public LinhaTipo LinhaTipo { get; set; } // Contorno, Dobra, Solta
-    }
-
-    public enum LinhaTipo
-    {
-        Contorno,
-        Dobra,
-        Solta
-    }
-
-    public class Ponto
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
     }
 }
