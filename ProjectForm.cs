@@ -66,8 +66,12 @@ namespace SW_CUT
                     preview.BorderStyle = BorderStyle.FixedSingle;
                     preview.Paint += (s, pe) => DrawPreview(pe.Graphics, formas, preview.Size);
 
-                    // Clique para excluir linhas
-                    preview.MouseClick += (s, me) => HandleMouseClickOnPreview(me, preview, formas);
+                    // Clique para abrir visualização ampliada
+                    preview.Click += (s, me) =>
+                    {
+                        PreviewForm pf = new PreviewForm(formas);
+                        pf.ShowDialog();
+                    };
 
                     // Label com nome do arquivo
                     Label lblNome = new Label();
@@ -148,78 +152,14 @@ namespace SW_CUT
                 }
             }
         }
-
-        private void HandleMouseClickOnPreview(MouseEventArgs e, PictureBox preview, List<Forma> formas)
-        {
-            var clickedPoint = new Ponto { X = e.X, Y = e.Y };
-            float threshold = 5f;
-
-            Forma linhaSelecionada = null;
-            foreach (var f in formas)
-            {
-                if (f.Tipo != "Linha") continue;
-                var p1 = f.Pontos[0];
-                var p2 = f.Pontos[1];
-
-                if (DistanceToLine(clickedPoint, p1, p2) <= threshold)
-                {
-                    linhaSelecionada = f;
-                    break;
-                }
-            }
-
-            if (linhaSelecionada != null)
-            {
-                var result = MessageBox.Show("Deseja excluir esta linha?", "Excluir Linha", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    formas.Remove(linhaSelecionada);
-                    preview.Invalidate();
-                }
-            }
-        }
-
-        private float DistanceToLine(Ponto p, Ponto a, Ponto b)
-        {
-            float A = p.X - a.X;
-            float B = p.Y - a.Y;
-            float C = b.X - a.X;
-            float D = b.Y - a.Y;
-
-            float dot = A * C + B * D;
-            float len_sq = C * C + D * D;
-            float param = (len_sq != 0) ? dot / len_sq : -1;
-
-            float xx, yy;
-
-            if (param < 0)
-            {
-                xx = a.X;
-                yy = a.Y;
-            }
-            else if (param > 1)
-            {
-                xx = b.X;
-                yy = b.Y;
-            }
-            else
-            {
-                xx = a.X + param * C;
-                yy = a.Y + param * D;
-            }
-
-            float dx = p.X - xx;
-            float dy = p.Y - yy;
-            return (float)Math.Sqrt(dx * dx + dy * dy);
-        }
     }
 
-    // Estrutura sugerida para as formas
+    // Estrutura de dados para formas
     public class Forma
     {
         public string Tipo { get; set; } // "Linha" ou "Circulo"
         public List<Ponto> Pontos { get; set; }
-        public float Raio { get; set; } // Para círculos
+        public float Raio { get; set; } // para círculos
         public LinhaTipo LinhaTipo { get; set; } // Contorno, Dobra, Solta
     }
 
@@ -236,6 +176,3 @@ namespace SW_CUT
         public float Y { get; set; }
     }
 }
-
-
-
