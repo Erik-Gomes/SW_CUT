@@ -9,10 +9,15 @@ namespace SW_CUT
     {
         private List<Forma> formas;
         private Panel canvas;
+        private Forma linhaSelecionada = null;
 
         private float zoom = 1.0f;
         private Point pan = new Point(0, 0);
         private Point lastMousePos;
+
+        private Panel menuLateral;
+        private Button btnContorno;
+        private Button btnDobra;
 
         public PreviewForm(List<Forma> formas)
         {
@@ -22,6 +27,7 @@ namespace SW_CUT
 
         private void InitializeComponent()
         {
+            // Canvas para desenhar
             this.canvas = new Panel();
             this.canvas.Dock = DockStyle.Fill;
             this.canvas.BackColor = Color.White;
@@ -32,7 +38,30 @@ namespace SW_CUT
             this.canvas.MouseClick += Canvas_MouseClick;
             this.Controls.Add(this.canvas);
 
-            this.ClientSize = new Size(800, 600);
+            // Menu lateral
+            menuLateral = new Panel();
+            menuLateral.Dock = DockStyle.Right;
+            menuLateral.Width = 60;
+            menuLateral.BackColor = Color.LightGray;
+            this.Controls.Add(menuLateral);
+
+            // Botão contorno (verde)
+            btnContorno = new Button();
+            btnContorno.BackColor = Color.Green;
+            btnContorno.Size = new Size(50, 50);
+            btnContorno.Location = new Point(5, 20);
+            btnContorno.Click += BtnContorno_Click;
+            menuLateral.Controls.Add(btnContorno);
+
+            // Botão dobra (amarelo)
+            btnDobra = new Button();
+            btnDobra.BackColor = Color.Yellow;
+            btnDobra.Size = new Size(50, 50);
+            btnDobra.Location = new Point(5, 80);
+            btnDobra.Click += BtnDobra_Click;
+            menuLateral.Controls.Add(btnDobra);
+
+            this.ClientSize = new Size(900, 600);
             this.Text = "Visualização Ampliada";
         }
 
@@ -48,7 +77,6 @@ namespace SW_CUT
             g.Clear(Color.White);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            // Calcula bounding box
             float minX = float.MaxValue, minY = float.MaxValue;
             float maxX = float.MinValue, maxY = float.MinValue;
 
@@ -81,13 +109,13 @@ namespace SW_CUT
                     switch (f.LinhaTipo)
                     {
                         case LinhaTipo.Contorno:
-                            pen = Pens.Green;
+                            pen = (f == linhaSelecionada) ? new Pen(Color.Lime, 2) : Pens.Green;
                             break;
                         case LinhaTipo.Dobra:
-                            pen = Pens.Yellow;
+                            pen = (f == linhaSelecionada) ? new Pen(Color.Gold, 2) : Pens.Yellow;
                             break;
                         case LinhaTipo.Solta:
-                            pen = Pens.Red;
+                            pen = (f == linhaSelecionada) ? new Pen(Color.Red, 2) : Pens.Red;
                             break;
                     }
 
@@ -133,9 +161,9 @@ namespace SW_CUT
         private void Canvas_MouseClick(object sender, MouseEventArgs e)
         {
             var clickedPoint = new Ponto { X = e.X, Y = e.Y };
-            float threshold = 5f / zoom; // ajusta para zoom
+            float threshold = 5f / zoom;
 
-            Forma linhaSelecionada = null;
+            Forma linhaEncontrada = null;
             foreach (var f in formas)
             {
                 if (f.Tipo != "Linha") continue;
@@ -144,19 +172,15 @@ namespace SW_CUT
 
                 if (DistanceToLine(clickedPoint, p1, p2) <= threshold)
                 {
-                    linhaSelecionada = f;
+                    linhaEncontrada = f;
                     break;
                 }
             }
 
-            if (linhaSelecionada != null)
+            if (linhaEncontrada != null)
             {
-                var result = MessageBox.Show("Deseja excluir esta linha?", "Excluir Linha", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    formas.Remove(linhaSelecionada);
-                    canvas.Invalidate();
-                }
+                linhaSelecionada = linhaEncontrada;
+                canvas.Invalidate();
             }
         }
 
@@ -193,5 +217,24 @@ namespace SW_CUT
             float dy = p.Y - yy;
             return (float)Math.Sqrt(dx * dx + dy * dy);
         }
+
+        private void BtnContorno_Click(object sender, EventArgs e)
+        {
+            if (linhaSelecionada != null && linhaSelecionada.LinhaTipo != LinhaTipo.Solta)
+            {
+                linhaSelecionada.LinhaTipo = LinhaTipo.Contorno;
+                canvas.Invalidate();
+            }
+        }
+
+        private void BtnDobra_Click(object sender, EventArgs e)
+        {
+            if (linhaSelecionada != null && linhaSelecionada.LinhaTipo != LinhaTipo.Solta)
+            {
+                linhaSelecionada.LinhaTipo = LinhaTipo.Dobra;
+                canvas.Invalidate();
+            }
+        }
     }
 }
+
