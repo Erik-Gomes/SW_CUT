@@ -27,7 +27,6 @@ namespace SW_CUT
 
         private void InitializeComponent()
         {
-            // Canvas para desenhar
             this.canvas = new Panel();
             this.canvas.Dock = DockStyle.Fill;
             this.canvas.BackColor = Color.White;
@@ -38,14 +37,12 @@ namespace SW_CUT
             this.canvas.MouseClick += Canvas_MouseClick;
             this.Controls.Add(this.canvas);
 
-            // Menu lateral
             menuLateral = new Panel();
             menuLateral.Dock = DockStyle.Right;
             menuLateral.Width = 60;
             menuLateral.BackColor = Color.LightGray;
             this.Controls.Add(menuLateral);
 
-            // Botão contorno (verde)
             btnContorno = new Button();
             btnContorno.BackColor = Color.Green;
             btnContorno.Size = new Size(50, 50);
@@ -53,7 +50,6 @@ namespace SW_CUT
             btnContorno.Click += BtnContorno_Click;
             menuLateral.Controls.Add(btnContorno);
 
-            // Botão dobra (amarelo)
             btnDobra = new Button();
             btnDobra.BackColor = Color.Yellow;
             btnDobra.Size = new Size(50, 50);
@@ -61,7 +57,7 @@ namespace SW_CUT
             btnDobra.Click += BtnDobra_Click;
             menuLateral.Controls.Add(btnDobra);
 
-            // Botão Ajustar Escala
+            // Botão Escala
             Button btnEscala = new Button();
             btnEscala.BackColor = Color.LightBlue;
             btnEscala.Size = new Size(50, 50);
@@ -73,36 +69,6 @@ namespace SW_CUT
             this.ClientSize = new Size(900, 600);
             this.Text = "Visualização Ampliada";
         }
-
-        private void BtnEscala_Click(object sender, EventArgs e)
-{
-    if (linhaSelecionada == null && formas.Count == 0)
-    {
-        MessageBox.Show("Não há desenho carregado para ajustar a escala.");
-        return;
-    }
-
-    string input = Microsoft.VisualBasic.Interaction.InputBox(
-        "Digite o fator de escala desejado:",
-        "Ajustar Escala",
-        zoom.ToString("0.##")
-    );
-
-    if (float.TryParse(input, out float novaEscala))
-    {
-        if (novaEscala <= 0)
-        {
-            MessageBox.Show("O fator de escala deve ser maior que 0.");
-            return;
-        }
-        zoom = novaEscala;
-        canvas.Invalidate();
-    }
-    else
-    {
-        MessageBox.Show("Valor inválido.");
-    }
-}
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
@@ -161,15 +127,6 @@ namespace SW_CUT
                     g.DrawLine(pen,
                                p1.X * scale + offsetX, p1.Y * scale + offsetY,
                                p2.X * scale + offsetX, p2.Y * scale + offsetY);
-                }
-                else if (f.Tipo == "Circulo" && f.Raio > 0)
-                {
-                    var centro = f.Pontos[0];
-                    float raio = f.Raio * scale;
-                    g.DrawEllipse(Pens.Green,
-                                  centro.X * scale + offsetX - raio,
-                                  centro.Y * scale + offsetY - raio,
-                                  raio * 2, raio * 2);
                 }
             }
         }
@@ -274,6 +231,46 @@ namespace SW_CUT
                 canvas.Invalidate();
             }
         }
-    }
-}
 
+        private void BtnEscala_Click(object sender, EventArgs e)
+        {
+            if (formas.Count == 0)
+            {
+                MessageBox.Show("Não há desenho carregado para ajustar a escala.");
+                return;
+            }
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox(
+                "Digite o fator de escala (ex: 1 = original, 2 = dobro, 0.5 = metade):",
+                "Ajustar Escala",
+                zoom.ToString("0.##")
+            );
+
+            if (float.TryParse(input, out float novaEscala))
+            {
+                if (novaEscala <= 0)
+                {
+                    MessageBox.Show("O fator de escala deve ser maior que 0.");
+                    return;
+                }
+                zoom = novaEscala;
+                canvas.Invalidate();
+            }
+            else
+            {
+                MessageBox.Show("Valor inválido.");
+            }
+        }
+    }
+
+    public class Forma
+    {
+        public string Tipo { get; set; } // "Linha" ou "Circulo"
+        public List<Ponto> Pontos { get; set; }
+        public float Raio { get; set; } // para círculos
+        public LinhaTipo LinhaTipo { get; set; } // Contorno, Dobra, Solta
+    }
+
+    public enum LinhaTipo
+    {
+        Cont
