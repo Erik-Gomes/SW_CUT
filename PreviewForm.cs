@@ -61,9 +61,48 @@ namespace SW_CUT
             btnDobra.Click += BtnDobra_Click;
             menuLateral.Controls.Add(btnDobra);
 
+            // Botão Ajustar Escala
+            Button btnEscala = new Button();
+            btnEscala.BackColor = Color.LightBlue;
+            btnEscala.Size = new Size(50, 50);
+            btnEscala.Location = new Point(5, 140);
+            btnEscala.Text = "Escala";
+            btnEscala.Click += BtnEscala_Click;
+            menuLateral.Controls.Add(btnEscala);
+
             this.ClientSize = new Size(900, 600);
             this.Text = "Visualização Ampliada";
         }
+
+        private void BtnEscala_Click(object sender, EventArgs e)
+{
+    if (linhaSelecionada == null && formas.Count == 0)
+    {
+        MessageBox.Show("Não há desenho carregado para ajustar a escala.");
+        return;
+    }
+
+    string input = Microsoft.VisualBasic.Interaction.InputBox(
+        "Digite o fator de escala desejado:",
+        "Ajustar Escala",
+        zoom.ToString("0.##")
+    );
+
+    if (float.TryParse(input, out float novaEscala))
+    {
+        if (novaEscala <= 0)
+        {
+            MessageBox.Show("O fator de escala deve ser maior que 0.");
+            return;
+        }
+        zoom = novaEscala;
+        canvas.Invalidate();
+    }
+    else
+    {
+        MessageBox.Show("Valor inválido.");
+    }
+}
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
