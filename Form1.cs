@@ -40,17 +40,11 @@ namespace SW_CUT
         {
           //MessageBox.Show("ABRIR PROJETO - SELECIONE ARQUIVO");
         }
-
-        private void label2_Click(object sender, EventArgs e)
+        private void linkLabel1_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Site oficial: sw_cut.com.br\nSoftware 100% offline para uso em CPU", 
+                    "Informações", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            LinkLabel linkLabel = new LinkLabel();
-            linkLabel.Text = "Clique aqui para acessar o Google";
-            linkLabel.LinkArea = new LinkArea(10, 6); // "Google" como link
-        }
+    
     }
 }
