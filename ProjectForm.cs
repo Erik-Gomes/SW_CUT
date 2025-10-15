@@ -5,12 +5,12 @@ using System.Windows.Forms;
 
 namespace SW_CUT
 {
-    public partial class Form1 : Form
+    public partial class ProjectForm : Form
     {
         private FlowLayoutPanel flowPreviews;
         private Button btnImportarDXF;
 
-        public Form1()
+        public ProjectForm()
         {
             InitializeComponent();
         }
@@ -49,7 +49,7 @@ namespace SW_CUT
 
                 foreach (var arquivo in openFile.FileNames)
                 {
-                    var leitor = new DxfReader();
+                    var leitor = new DxfBasicReader();
                     var formas = leitor.LerArquivo(arquivo);
 
                     Panel container = new Panel();
@@ -83,7 +83,7 @@ namespace SW_CUT
             }
         }
 
-        private void DrawPreview(Graphics g, List<Forma> formas, Size size)
+    private void DrawPreview(Graphics g, List<FormaGeom> formas, Size size)
         {
             if (formas == null || formas.Count == 0) return;
 

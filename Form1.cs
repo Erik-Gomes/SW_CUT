@@ -19,7 +19,7 @@ namespace SW_CUT
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var leitor = new DxfReader();
+            var leitor = new DxfBasicReader();
             var formas = leitor.LerArquivo("meuarquivo.dxf");
 
             foreach (var forma in formas)
