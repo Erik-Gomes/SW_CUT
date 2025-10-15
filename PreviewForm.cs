@@ -273,4 +273,14 @@ namespace SW_CUT
 
     public enum LinhaTipo
     {
-        Cont
+        Contorno,
+        Dobra,
+        Solta
+    }
+    
+    public class Ponto
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+    }       
+}
