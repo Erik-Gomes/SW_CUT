@@ -1,7 +1,7 @@
 # Build e cache
-bin\
-obj\
-.vs\
+bin/
+obj/
+.vs/
 *.user
 *.suo
 *.cache
@@ -9,6 +9,7 @@ obj\
 *.log
 *.vsidx
 *.vscode/
+packages/
 
 # Arquivos temporários
 *.tmp
