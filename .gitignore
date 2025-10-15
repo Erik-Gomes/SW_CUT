@@ -1,0 +1,20 @@
+# Build e cache
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.db
+*.log
+*.vsidx
+*.vscode/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.old
+
+# Configurações locais
+*.DotSettings
+*.local
