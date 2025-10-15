@@ -5,12 +5,12 @@ using System.Windows.Forms;
 
 namespace SW_CUT
 {
-    public partial class ProjectForm : Form
+    public partial class Form1 : Form
     {
         private FlowLayoutPanel flowPreviews;
         private Button btnImportarDXF;
 
-        public ProjectForm()
+        public Form1()
         {
             InitializeComponent();
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using netDxf;
 using netDxf.Entities;
 
-namespace SW_CUT.Core
+namespace SW_CUT
 {
     public class Shape
     {
