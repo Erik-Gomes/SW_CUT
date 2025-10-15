@@ -7,9 +7,9 @@ namespace SW_CUT
 {
     public class PreviewForm : Form
     {
-        private List<Forma> formas;
+    private List<FormaGeom> formas;
         private Panel canvas;
-        private Forma linhaSelecionada = null;
+    private FormaGeom linhaSelecionada = null;
 
         private float zoom = 1.0f;
         private Point pan = new Point(0, 0);
@@ -19,7 +19,7 @@ namespace SW_CUT
         private Button btnContorno;
         private Button btnDobra;
 
-        public PreviewForm(List<Forma> formas)
+        public PreviewForm(List<FormaGeom> formas)
         {
             this.formas = formas;
             InitializeComponent();
@@ -75,7 +75,7 @@ namespace SW_CUT
             DrawPreview(e.Graphics, formas, canvas.ClientSize);
         }
 
-        private void DrawPreview(Graphics g, List<Forma> formas, Size size)
+        private void DrawPreview(Graphics g, List<FormaGeom> formas, Size size)
         {
             if (formas == null || formas.Count == 0) return;
 
@@ -159,7 +159,7 @@ namespace SW_CUT
             var clickedPoint = new Ponto { X = e.X, Y = e.Y };
             float threshold = 5f / zoom;
 
-            Forma linhaEncontrada = null;
+            FormaGeom linhaEncontrada = null;
             foreach (var f in formas)
             {
                 if (f.Tipo != "Linha") continue;
@@ -263,24 +263,5 @@ namespace SW_CUT
         }
     }
 
-    public class Forma
-    {
-        public string Tipo { get; set; } // "Linha" ou "Circulo"
-        public List<Ponto> Pontos { get; set; }
-        public float Raio { get; set; } // para círculos
-        public LinhaTipo LinhaTipo { get; set; } // Contorno, Dobra, Solta
-    }
-
-    public enum LinhaTipo
-    {
-        Contorno,
-        Dobra,
-        Solta
-    }
-    
-    public class Ponto
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-    }       
+    // Usa FormaGeom, Ponto e LinhaTipo definidos em Models/FormaGeom.cs
 }
