@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SW_CUT
@@ -9,6 +10,7 @@ namespace SW_CUT
         public List<Ponto> Pontos { get; set; } = new List<Ponto>();
         public float Raio { get; set; }
         public LinhaTipo LinhaTipo { get; set; }
+        public float Angulos { get; set;}
     }
 
     public class Ponto
@@ -23,4 +25,6 @@ namespace SW_CUT
         Dobra,
         Solta
     }
+
+
 }

@@ -19,10 +19,13 @@ namespace SW_CUT
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var leitor = new DxfBasicReader();
-            var formas = leitor.LerArquivo("meuarquivo.dxf");
+            //var leitor = new DxfBasicReader();
+            //var formas = leitor.LerArquivo("meuarquivo.dxf");
 
-            foreach (var forma in formas)
+            ProjectForm projectForm = new ProjectForm();
+            projectForm.ShowDialog();
+
+            /*foreach (var forma in formas)
             {
                 Console.WriteLine($"Forma: {forma.Tipo}");
                 foreach (var ponto in forma.Pontos)
@@ -33,7 +36,7 @@ namespace SW_CUT
                 {
                     Console.WriteLine($"  Raio: {forma.Raio}");
                 }
-            }
+            }*/
         }
 
         private void button2_Click(object sender, EventArgs e)
